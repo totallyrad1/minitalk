@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   print_u.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 15:39:59 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 13:58:48 by asnaji           ###   ########.fr       */
+/*   Created: 2023/11/07 15:36:28 by asnaji            #+#    #+#             */
+/*   Updated: 2023/11/10 13:55:15 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
-#include <signal.h>
-#include <unistd.h>
-#include <stdio.h>
-#include <limits.h>
-#include <stdio.h>
-#include "ft_printf/ft_printf.h"
+#include "ft_printf.h"
 
-int				ft_atoi(char *str);
-void			print_bits(unsigned char octet);
-unsigned char	reverse_bits(unsigned char octet);
+int	ft_printu(va_list args)
+{
+	unsigned int	nb;
 
-#endif
+	nb = va_arg(args, unsigned int);
+	return (ft_putnbr(nb));
+}

@@ -6,7 +6,7 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:41:28 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 10:41:34 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:05:56 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-int	ft_atoi(const char *str)
+int	ft_atoi(char *str)
 {
 	int	result;
 	int	sign;
@@ -64,20 +64,19 @@ void signalhandler(int signal)
 {
     static unsigned char myByte = 0;
     static int n = 0;
-    if (signal == SIGUSR1)
+    if (signal == SIGUSR1 && n != 8)
     {
         myByte |= (1 << n);
         n++;
     }
-    else if (signal == SIGUSR2)
+    else if (signal == SIGUSR2 && n != 8)
     {
         myByte |= (0 << n);
         n++;
     }
     if (n == 8)
     {
-        printf("%c", reverse_bits(myByte));
-        fflush(stdout);
+        ft_printf("%c", reverse_bits(myByte));
         n = 0;
         myByte = 0;
     }
@@ -87,7 +86,7 @@ void signalhandler(int signal)
 int main()
 {
 	pid_t currentPID = getpid();
-	printf("this is the pid : %d \n", currentPID);
+	ft_printf("this is the pid : %d \n", currentPID);
 
 	struct sigaction sa;
 	sa.sa_flags = SA_RESTART;

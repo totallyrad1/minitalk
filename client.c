@@ -6,16 +6,17 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:41:11 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 10:42:05 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/12 14:09:54 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <sys/signal.h>
+#include <unistd.h>
 
-int	ft_atoi(const char *str)
+int	ft_atoi(char *str)
 {
 	int	result;
 	int	sign;
@@ -40,13 +41,21 @@ int	ft_atoi(const char *str)
 	return (result);
 }
 
-void send_bit(pid_t targetPID, int bit)
+void send_bit(pid_t targetPID, int bit,int *index)
 {
+	int i;
     if (bit)
-        kill(targetPID, SIGUSR1);
+        {	
+			i = kill(targetPID, SIGUSR1);
+			if(i == -1)
+				*index =1;
+		}
     else
-        kill(targetPID, SIGUSR2);
-	usleep(800);
+        {
+			i =  kill(targetPID, SIGUSR2);
+			if(i == -1)
+				*index = 1;
+		};
 }
 
 int main(int ac, char **av)
@@ -55,17 +64,21 @@ int main(int ac, char **av)
 	int j;
     pid_t targetPID = atoi(av[1]);
     char *message = av[2];
-	char c = 'c';
+	int index = 0;
 	if(ac == 3)
 	{
 		while(message[i])
 		{
 			j = 7;
-			c = message[i];
 			while(j >= 0)
 			{
-				int bit = (c >> j) & 1;
-				send_bit(targetPID, bit);
+				send_bit(targetPID, message[i] >> j & 1, &index);
+				if(index == 1)
+				{
+					ft_printf("error no signal sent");
+					return 0;
+				}
+				usleep(800);
 				j--;
 			}
 			i++;

@@ -1,4 +1,4 @@
-SOURCES = server.c client.c
+SOURCES =  server.c client.c
 OBJECTS = $(SOURCES:.c=.o)
 LIBFTPRINTF	=	ft_printf/libftprintf.a
 LIBFTPRINTF_DIR	=	ft_printf
@@ -8,13 +8,13 @@ FLAGS = -Wall -Wextra -Werror
 
 all: $(LIBFTPRINTF) server client
 
-server: server.o $(LIBFTPRINTF) 
-	$(CC) $(FLAGS) $(LIBFTPRINTF) -o $@ $< 
+server: server.o $(LIBFTPRINTF) minitalk.h
+	$(CC) $(FLAGS) $(LIBFTPRINTF) helperfn.c -o $@ $< 
 
-client: client.o $(LIBFTPRINTF)
-	$(CC) $(FLAGS) $(LIBFTPRINTF) -o $@ $<
+client: client.o $(LIBFTPRINTF) minitalk.h
+	$(CC) $(FLAGS) $(LIBFTPRINTF) helperfn.c -o $@ $<
 
-%.o: %.c
+%.o: %.c 
 	$(CC) $(FLAGS) -c $?
 
 $(LIBFTPRINTF):

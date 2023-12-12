@@ -6,84 +6,92 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:41:11 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 14:09:54 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/12 22:16:11 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
 
-int	ft_atoi(char *str)
+void	sendbackslah(int targetpid)
 {
-	int	result;
-	int	sign;
+	char	c;	
+	int		j;	
+	int		index;	
+
+	j = 7;
+	index = 0;
+	c = '\0';
+	while (j >= 0)
+	{
+		send_bit(targetpid, c >> j & 1, &index);
+		if (index == 1)
+		{
+			ft_printf("\nCouldnt send the message check the pid");
+			exit(0);
+		}
+		usleep(300);
+		j--;
+	}
+}
+
+void	sendmessage(int targetpid, char *message)
+{
+	int	i;
+	int	j;
+	int	index;
+
+	i = 0;
+	j = 0;
+	index = 0;
+	while (message[i])
+	{
+		j = 7;
+		while (j >= 0)
+		{
+			send_bit(targetpid, message[i] >> j & 1, &index);
+			if (index == 1)
+			{
+				ft_printf("Couldnt send the message check the pid");
+				exit(0);
+			}
+			usleep(300);
+			j--;
+		}
+		i++;
+	}
+	sendbackslah(targetpid);
+}
+
+void	printmessage(int signal)
+{
+	if (signal == SIGUSR1)
+		ft_printf("Message sent successfully !!");
+}
+
+void	send_bit(pid_t targetPID, int bit, int *index)
+{
 	int	i;
 
-	result = 0;
-	sign = 1;
 	i = 0;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '+' || str[i] == '-')
+	if (bit)
 	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
+		i = kill(targetPID, SIGUSR1);
+		if (i == -1)
+			*index = 1;
 	}
-	while (str[i] >= '0' && str[i] <= '9')
+	else
 	{
-		result = result * 10 + (str[i] - '0');
-		i++;
+		i = kill(targetPID, SIGUSR2);
+		if (i == -1)
+			*index = 1;
 	}
-	return (result);
 }
 
-void send_bit(pid_t targetPID, int bit,int *index)
+int	main(int ac, char **av)
 {
-	int i;
-    if (bit)
-        {	
-			i = kill(targetPID, SIGUSR1);
-			if(i == -1)
-				*index =1;
-		}
-    else
-        {
-			i =  kill(targetPID, SIGUSR2);
-			if(i == -1)
-				*index = 1;
-		};
-}
-
-int main(int ac, char **av)
-{
-	int i = 0;
-	int j;
-    pid_t targetPID = atoi(av[1]);
-    char *message = av[2];
-	int index = 0;
-	if(ac == 3)
+	if (ac == 3)
 	{
-		while(message[i])
-		{
-			j = 7;
-			while(j >= 0)
-			{
-				send_bit(targetPID, message[i] >> j & 1, &index);
-				if(index == 1)
-				{
-					ft_printf("error no signal sent");
-					return 0;
-				}
-				usleep(800);
-				j--;
-			}
-			i++;
-		}
+		signal(SIGUSR1, printmessage);
+		sendmessage(ft_atoi(av[1]), av[2]);
 	}
-
-    return 0;
 }

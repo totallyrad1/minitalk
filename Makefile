@@ -1,31 +1,23 @@
-SOURCES =  server.c client.c
+SOURCES = server.c client.c helperfn.c
 OBJECTS = $(SOURCES:.c=.o)
-LIBFTPRINTF	=	ft_printf/libftprintf.a
-LIBFTPRINTF_DIR	=	ft_printf
-
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
 
-all: $(LIBFTPRINTF) server client
+all: server client
 
-server: server.o $(LIBFTPRINTF) minitalk.h
-	$(CC) $(FLAGS) $(LIBFTPRINTF) helperfn.c -o $@ $< 
+server: server.o helperfn.o
+	$(CC) $(FLAGS) -o $@ $^
 
-client: client.o $(LIBFTPRINTF) minitalk.h
-	$(CC) $(FLAGS) $(LIBFTPRINTF) helperfn.c -o $@ $<
+client: client.o helperfn.o
+	$(CC) $(FLAGS) -o $@ $^
 
-%.o: %.c 
-	$(CC) $(FLAGS) -c $?
-
-$(LIBFTPRINTF):
-	@ $(MAKE) -C $(LIBFTPRINTF_DIR)
+%.o: %.c minitalk.h
+	$(CC) $(FLAGS) -c -o $@ $<
 
 clean:
-	@ $(MAKE) clean -C $(LIBFTPRINTF_DIR)
 	rm -f $(OBJECTS)
 	
 fclean: clean
-	@ $(MAKE) fclean -C $(LIBFTPRINTF_DIR)
 	rm -f server client
 
 re: fclean all

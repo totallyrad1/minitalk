@@ -6,7 +6,7 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:41:11 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 22:16:11 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/19 13:47:19 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	sendbackslah(int targetpid)
 		send_bit(targetpid, c >> j & 1, &index);
 		if (index == 1)
 		{
-			ft_printf("\nCouldnt send the message check the pid");
+			ft_putstr("\nCouldnt send the message check the pid");
 			exit(0);
 		}
-		usleep(300);
+		usleep(5000);
 		j--;
 	}
 }
@@ -51,7 +51,7 @@ void	sendmessage(int targetpid, char *message)
 			send_bit(targetpid, message[i] >> j & 1, &index);
 			if (index == 1)
 			{
-				ft_printf("Couldnt send the message check the pid");
+				ft_putstr("Couldnt send the message check the pid");
 				exit(0);
 			}
 			usleep(300);
@@ -65,7 +65,8 @@ void	sendmessage(int targetpid, char *message)
 void	printmessage(int signal)
 {
 	if (signal == SIGUSR1)
-		ft_printf("Message sent successfully !!");
+		ft_putstr("Message sent successfully !!");
+	exit(0);
 }
 
 void	send_bit(pid_t targetPID, int bit, int *index)

@@ -6,11 +6,27 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/12 21:49:59 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 21:51:03 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:06:56 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void	ft_putchar(int c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+		ft_putchar(str[i++]);
+}
 
 int	ft_atoi(char *str)
 {
@@ -51,4 +67,20 @@ unsigned char	reverse_bits(unsigned char octet)
 		count--;
 	}
 	return (res);
+}
+
+void	ft_putnbr(long long n)
+{
+	if (n < 0)
+	{
+		ft_putchar('-');
+		n *= -1;
+	}
+	if (n > 9)
+	{
+		ft_putnbr(n / 10);
+		ft_putnbr(n % 10);
+	}
+	if (n >= 0 && n <= 9)
+		ft_putchar(n + 48);
 }

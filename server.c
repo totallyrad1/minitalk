@@ -6,7 +6,7 @@
 /*   By: asnaji <asnaji@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:41:28 by asnaji            #+#    #+#             */
-/*   Updated: 2023/12/12 21:54:06 by asnaji           ###   ########.fr       */
+/*   Updated: 2023/12/19 14:04:56 by asnaji           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ void	printcharacter(unsigned char *mybyte, siginfo_t *data, int *n)
 		kill(data->si_pid, SIGUSR1);
 		return ;
 	}
-	ft_printf("%c", reverse_bits(*mybyte));
+	ft_putchar(reverse_bits(*mybyte));
 }
 
-void	signalhandler(int signal, siginfo_t *data, void *tkhrbi9a)
+void	signalhandler(int signal, siginfo_t *data, void *useless)
 {
 	static unsigned char	mybyte;
 	static int				currentclientpid;
 	static int				n;
 
-	(void)tkhrbi9a;
+	(void)useless;
 	if (currentclientpid != data->si_pid)
 	{
 		n = 0;
@@ -57,9 +57,11 @@ int	main(void)
 	sa.sa_flags = SA_SIGINFO;
 	sa.sa_sigaction = signalhandler;
 	serverpid = getpid();
-	ft_printf("this is the pid : [%d] \n", serverpid);
+	ft_putstr("this is the pid : ");
+	ft_putnbr(serverpid);
+	ft_putstr(" \n");
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-	while (0 == 0)
+	while (1)
 		pause();
 }

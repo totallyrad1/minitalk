@@ -1,6 +1,6 @@
 SOURCES = server.c client.c helperfn.c
 OBJECTS = $(SOURCES:.c=.o)
-CC = gcc
+CC = cc
 FLAGS = -Wall -Wextra -Werror
 
 all: server client
@@ -12,7 +12,7 @@ client: client.o helperfn.o
 	$(CC) $(FLAGS) -o $@ $^
 
 %.o: %.c minitalk.h
-	$(CC) $(FLAGS) -c -o $@ $<
+	$(CC) $(FLAGS) -c $< -o  $@
 
 clean:
 	rm -f $(OBJECTS)
